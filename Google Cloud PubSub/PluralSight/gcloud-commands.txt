@@ -1,0 +1,82 @@
+gcloud pubsub subscriptions pull --auto-ack sale_day_offers-sub
+gcloud pubsub subscriptions pull --auto-ack sale_day_offers-sub --limit 10
+
+# Creating Topic and subscriptions in command line:
+===================================================
+1.Create Topic:
+gcloud pubsub topics create spikey_bugs
+
+2.Create Subscriptions:
+gcloud pubsub subscriptions create --topic spikey_bugs --ack-deadline=60 spikey_bugs_dev_sub
+gcloud pubsub subscriptions create --topic spikey_bugs --ack-deadline=60 spikey_bugs_reports_sub
+
+3.Create message:
+gcloud pubsub topics publish spikey_bugs --message "Tester 1: Problem editing number of items in the cart."
+gcloud pubsub topics publish spikey_bugs --message "Tester 2: Citibank - Wrong URL of the payment gateway."
+
+4.Pull all the subscriptions: since auto acknowlege is truned on if a message is already acknowledged then the message will be removed.
+gcloud pubsub subscriptions pull --auto-ack spikey_bugs_dev_sub
+gcloud pubsub subscriptions pull --auto-ack spikey_bugs_reports_sub
+
+5.Pull without acknowledge:
+gcloud pubsub subscriptions pull spikey_bugs_dev_sub
+
+6.Pull with acknowledgment:
+gcloud pubsub subscriptions ack spikey_bugs_dev_sub --ack_ids=XkAS...
+
+7.Pull without acknowledge:
+gcloud pubsub subscriptions pull spikey_bugs_dev_sub
+
+8. List all the topics:
+gcloud pubsub topics list
+
+9. List all the subscriptions:
+gcloud pubsub subscriptions list
+
+10. List all the subscriptions on a given topic:
+gcloud pubsub topics list-subscriptions spikey_bugs
+
+11. Delete a subscription:
+gcloud pubsub subscriptions delete spikey_bugs_dev_sub
+
+12. Delete a topic: Deleting a topic does not automatically delete its subscriptions
+gcloud pubsub topics delete spikey_bugs
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
