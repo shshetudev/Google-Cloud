@@ -40,14 +40,62 @@ gcloud pubsub topics list-subscriptions spikey_bugs
 gcloud pubsub subscriptions delete spikey_bugs_dev_sub
 
 12. Delete a topic: Deleting a topic does not automatically delete its subscriptions
+------------------------------------------------------------------
 gcloud pubsub topics delete spikey_bugs
 
 
+13. Create a Beta topics-subcriptions-snapshot:
+---------------------------------------
+gcloud beta pubsub topics create spikey_customer_service
+gcloud beta pubsub subcriptions create spikey_customer_service_sub1 --topic=spikey_customer_service --ack-deadline=10
+gcloud beta pubsub topics publish spikey_customer_service --message "Issue 1: User can't login from a particular location"
+gcloud beta pubsub subcriptions pull --auto-ack spikey_customer_service_sub1
+gcloud beta pubsub topics publish spikey_customer_service --message 'Issue 2: Change of delivery address'
+
+14. Create Snapshot:
+--------------------
+gcloud beta pubsub snapshots create customer_service_snapshot --subscription=spikey_customer_service_sub1
+gcloud beta pubsub topics publish spikey_customer_service --message 'Issue 3: Edit the size of the item ordered.'
+gcloud beta pubsub topics publish spikey_customer_service --message 'Issue 4: Enquiry regarding and out-of-stock item.'
+Pull 2 times:
+-------------
+gcloud beta pubsub subscriptions pull --auto-ack spikey_customer_service_sub1
+
+15. Seek from Snapshots:
+------------------------
+gcloud beta pubsub subscriptions seek spikey_customer_service_sub1 --snapshot=customer_service_snapshot
+
+gcloud beta pubsub subscriptions create spikey_customer_service_sub2 --topic=spikey_customer_service --ack-deadline=10
+ -> Add snapshot to this subscriptions -> then pull 3 times
+ gcloud beta pubsub subscriptions pull spikey_customer_service_sub2 --auto-ack
+ 
+ 16. Delete the Snapshot:
+ ------------------------
+ gcloud beta pubsub snapshots delete customer_service_snapshot
 
 
+######## Retain messages and seek to timestamp ##########
+17. Show all the topics and subscriptions list:
+-----------------------------------------------
+gcloud pubsub topics list
+gcloud pubsub subcriptions list
 
+*********  We can only seek to timestamp if: --retain-acked-messages are turned on *************
 
+18. Updating a subscription:
+-----------------------------
+gcloud beta pubsub subscriptions update spikey_customer_services_sub1 --retain-acked-messages
+gcloud beta pusub topics publish spikey_customer_service --message="Issue 5: Mobile App is stuck at start Screen!"
+gcloud beta pubsub subscriptions pull --auto-ack spikey_customer_service_sub1
 
+19. Seek to TimeStamp:
+----------------------
+Save to environment: TS_FORMAT=%Y-%m-%dT%H:%M:%SZ
+--------------------
+gcloud beta pubsub subscriptions seek spikey_customer_service_sub1 --time=$(date -u -d '10 min' + $TS_FORMAT)
+gcloud beta pubsub subcriptions pull --auto-ack spikey_customer_service_sub1
+
+########  Using pubSub with a push subscriptions ##########
 
 
 
