@@ -1,0 +1,16 @@
+# Importing libraries
+from google.cloud import storage
+import logging
+import base64
+
+# Defining a client and Storage Bucket
+storage_client = storage.Client()
+STORAGE_BUCKET = 'spikey-data-store'
+
+# method to write issues to storage
+def write_issue_to_storage(request):
+# Accepts request
+	request_json = request.get_json()
+	received_message = base64.b64decode(request_json['message'['data']).decode('utf-8')
+	bucket = storage_client.get_bucket(STORAGE_BUCKET)	
+	
