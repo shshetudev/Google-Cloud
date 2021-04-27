@@ -1,0 +1,24 @@
+gsutil:
+=======
+	`gsutil ls`
+
+
+Code Sample to List all buckets (python):
+=========================================
+
+from google.cloud import storage
+
+def list_buckets():
+	"""Lists all buckets."""
+	
+	storage_client = storage.Client()
+	buckets = storage_client.list_buckets()
+	
+	for bucket in buckets:
+		print(bucket.name)
+		
+
+REST APIS:
+==========
+	curl -X GET -H "Authorization: Bearer OAUTH2_TOKEN" \
+  "https://storage.googleapis.com/storage/v1/b?project=PROJECT_ID"

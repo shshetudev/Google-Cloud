@@ -1,0 +1,41 @@
+What is Cloud Storage:
+---------------------- 
+ i) Cloud Storage is a service for storing your objects in Google Cloud.
+ ii) An object is an immutable piece of data consisting of a file of any format.
+ iii) We store objects in containers called buckets.
+ iv) All buckets are associated with a project and we can group our projects under an organization.
+ 
+ Google Cloud hierarchy: 
+ -----------------------
+ 	Organization -> Project -> Bucket -> Object
+
+a) Organization: Our company called `Example Inc.` creates a Google Cloud organization called: `exampleinc.org`.
+
+b) Project: `Example Inc.` is building several applications, and each one is assocaiated with a project. Each project has its own set of Cloud Storage APIs, as well as other resources.
+
+c) Bucket: Each project can contain multiple buckets, which are conatainers to store your objects.
+ 
+Example: 
+For photos - Photos bucket
+For videos - Videos bucket
+
+d) Object: An individual file, such as an image called: puppy.png.
+
+Basic tools for Cloud Storage:
+------------------------------
+i) Console : Visual interface
+ii) gsutil : command line tool to allow us to interact through terminal
+iii) Client libraries : Allow us to manage data using preferred languages.
+iv) Rest APIs : Manages our data using the JSON or XML API.
+
+Securing Data:
+--------------
+i) IAM (Identity and Access Management): We can grant members certain types of access to buckets and objects such as: update, create or delete
+
+ii) Data encryption: Uses server side encryption to encrypt data by default. We can also use: customer-managed encryption keys, customer-supplied ecryption keys.
+
+iii) Authentication: Ensures that anyone who accesses data has proper credentials.
+
+iv) Bucket Lock: Govern how long objects in buckets must be retained by - specific retention policy.
+
+v) Object Versioning: When a live version of an object is replaced or deleted, it can be retained as a noncurrent version if we enable: `Object Versioning`

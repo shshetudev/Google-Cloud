@@ -1,0 +1,77 @@
+How to create a new storage bucket:
+===================================
+1. Use the `gsutil mb` command: 
+	`gsutil mb gs://demo-bucket-shetu`
+2. Optional flags to have greater control over the creation of our bucket:
+
+-p: Specify the project with which our bucket will be associated.
+	ex: `my-first-project`
+-c: Specify the default storage class of our bucket.
+	example: `NEARLINE`
+-l: Specify the location of our bucket.
+	example: `US-EAST1`
+-b: Enable uniform bucket-level access.
+
+Complete Example: 
+-----------------
+`gsutil mb -p my-first-project -c NEARLINE -l US-EAST1 -b on gs://demo-bucket-shetu`
+
+
+Code Samples to create new bucket (python):
+===========================================
+
+# importing library
+from google.cloud import storage
+
+# function to create a bucket class location
+def create_bucket_class_location(bucket_name):
+	"""Create a new bucket in specific location with storage class"""
+# bucket_name = "my-new-bucket-name"
+	# creating storage client
+	storage_client = storage.Client()
+	
+	# creating a bucket with bucket name
+	bucket = storage_client.bucket(bucket_name)
+	
+	# creating bucket storage class name
+	bucket.storage_class = "COLDLINE"
+	
+	# creating a new bucket object
+	new_bucket = storage_client.create_bucket(bucket, location="us")
+	
+	# print the created bucket details
+	print(
+		"Created bucket {} in {} with storage class {}".format(new_bucket.name, new_bucket.location, new_bucket.storage_class)
+	)
+	
+	# return the newly created bucket object
+	return new_bucket
+	
+REST APIS:
+==========
+1. Get an authorization access token from the OAuth 2.0 Playground. Configure the playground to use your own OAuth credentials.
+2. Create a .json file that contains the settings for the bucket, which must include a name for the bucket.
+
+	JSON to create bucket:
+	----------------------
+		{
+		 "name": "demo-bucket-shetu",
+		 "location": "US-EAST1",
+		 "storageClass": "NEARLINE",
+		 "iamConfiguration": {
+		 	"uniformBucketLevelAccess": {
+		 		"enabled": true
+		 	},
+		 }
+		}
+	- This is the required @JSON_FILE
+	
+	cURL to call the JSON API:
+	-------------------------
+		curl -X POST --data-binary @JSON_FILE_NAME.json \
+		-H "Authorization: Bearer OAUTH2_TOKEN" \
+		-H "Content-Type: application/json" \
+		"https://storage.googleapis.com/storage/v1/b?project=PROJECT_ID"
+	
+	
+	

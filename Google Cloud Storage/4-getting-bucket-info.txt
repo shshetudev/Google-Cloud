@@ -1,0 +1,5 @@
+Here we can get information on size and metadata of our Cloud Storage buckets.
+
+Storage Classes: 
+================
+	The storage class we set for an object affects the object's avilability and pricing model. We can change the storage class of an existing object either by rewriting the object or by using Object Lifecycle management.
