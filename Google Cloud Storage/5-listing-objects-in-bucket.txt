@@ -1,0 +1,56 @@
+We can list the objects stored in our Cloud Storage buckets, which are ordered in the list lexicographically by name.
+
+gsutil:
+======
+	Without prefix:
+	---------------
+	`gsutil ls -r gs://demo-bucket-shetu`
+	
+	With prefix:
+	------------
+	`gsutil ls -r gs://demo-bucket-shetu/folder1**`
+	
+
+code sample (python):
+=====================
+Without prefix:
+---------------
+from google.cloud import storage
+
+def list_blobs(bucket_name):
+	"""Lists all the blobs in the bucket."""
+	# bucket_name = demo-bucket-shetu
+	storage_client = storage.Client()
+	
+	# Note: Client.list_blobs requires at least package 		version 1.17.0.
+	blobs = storage.client.list_blobs(bucket_name)
+	
+	for blob in blobs:
+		print(blob.name)
+		
+With prefix:
+------------
+from google.cloud import storage
+
+def list_blobs_with_prefix(bucket_name, prefix, delimiter=None):
+	"""Lists all the blobs in the bucket that begin with the 		prefix"""
+	
+	storage_client = storage.Client()
+	
+	# Note: Client.list_blobs requires at least package 
+	version 1.17.0.
+	blobs = storage_client.list_blobs(
+		bucket_name, prefix=prefix, delimiter=delimiter
+	)
+	
+	print("Blobs:")
+	for blob in blobs:
+		print(blob.name)
+	if delimiter:
+		print("Prefixes:")
+		for prefix in blobs.prefixes:
+			print(prefix)
+
+
+
+
