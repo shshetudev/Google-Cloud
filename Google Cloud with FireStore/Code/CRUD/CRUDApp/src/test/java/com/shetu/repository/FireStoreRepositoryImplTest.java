@@ -16,23 +16,24 @@ import javax.inject.Inject;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.List;
 
 @MicronautTest
 public class FireStoreRepositoryImplTest {
   private static final Logger LOG = LoggerFactory.getLogger(FireStoreRepositoryImplTest.class);
-  private GoogleCredentials googleCredentials;
-  private Firestore db;
+//  private GoogleCredentials googleCredentials;
+//  private Firestore db;
   @Inject
   private FireStoreRepositoryImpl fireStoreRepository;
   // -----------------------------------------------------------------------------------
   // Configuration
-  @BeforeEach
-  void setup() throws IOException {
-    String projectId = "river-pointer-308317";
-    String udProjectId = "rakizo-dev";
-    this.googleCredentials = getCredentials();
-    this.db = getFirestoreDB(googleCredentials, udProjectId);
-  }
+//  @BeforeEach
+//  void setup() throws IOException {
+//    String projectId = "river-pointer-308317";
+//    String udProjectId = "rakizo-dev";
+//    this.googleCredentials = getCredentials();
+//    this.db = getFirestoreDB(googleCredentials, udProjectId);
+//  }
   private GoogleCredentials getCredentials() throws IOException {
     String jsonPath = "/home/shetu/Shetu's folder/Official/UD/RK/rakizo-dev-f59197306042.json";
     return GoogleCredentials.fromStream(new FileInputStream(jsonPath))
@@ -46,11 +47,11 @@ public class FireStoreRepositoryImplTest {
     Firestore db = firestoreOptions.getService();
     return db;
   }
-  @AfterEach
-  void cleanup() {
-    this.db = null;
-    this.googleCredentials = null;
-  }
+//  @AfterEach
+//  void cleanup() {
+//    this.db = null;
+//    this.googleCredentials = null;
+//  }
   //--------------------------------------------------------------------------------------------------------------
 
   @Test
@@ -59,7 +60,14 @@ public class FireStoreRepositoryImplTest {
     user = (User) fireStoreRepository.insert(user);
     LOG.debug("Saved user:{}",user);
   }
+
+  @Test
+  void findAll(){
+    List<User> users = fireStoreRepository.findAll(User.class);
+    LOG.debug("Users found:[{}]",users);
+  }
   private User getUser(String name, String age){
     return new User(name, age);
   }
+
 }
