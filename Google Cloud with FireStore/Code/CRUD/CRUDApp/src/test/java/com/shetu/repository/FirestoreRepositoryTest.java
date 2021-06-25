@@ -3,6 +3,8 @@ package com.shetu.repository;
 import com.google.api.core.ApiFuture;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.firestore.*;
+import com.google.cloud.storage.Storage;
+import com.google.cloud.storage.StorageOptions;
 import com.shetu.entity.City;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import org.junit.jupiter.api.*;
@@ -21,13 +23,13 @@ public class FirestoreRepositoryTest {
   private GoogleCredentials googleCredentials;
   private Firestore db;
 
-  @BeforeEach
-  void setup() throws IOException {
-    String projectId = "river-pointer-308317";
-    String udProjectId = "rakizo-dev";
-    this.googleCredentials = getCredentials();
-    this.db = getFirestoreDB(googleCredentials, udProjectId);
-  }
+//  @BeforeEach
+//  void setup() throws IOException {
+//    String projectId = "river-pointer-308317";
+//    String udProjectId = "rakizo-dev";
+//    this.googleCredentials = getCredentials();
+//    this.db = getFirestoreDB(googleCredentials, udProjectId);
+//  }
 
   @Test
   void testGoogleCredentials() throws IOException {
@@ -36,9 +38,17 @@ public class FirestoreRepositoryTest {
   }
 
   @Test
+  void getDefaultStorage() throws IOException {
+//    Storage storage = StorageOptions.getDefaultInstance().getService();
+    GoogleCredentials googleCredentials = getDefaultCredentials();
+    Storage storage = StorageOptions.newBuilder().setCredentials(googleCredentials).build().getService();
+    LOG.info("storage:[{}]",storage);
+  }
+  @Test
   void testGetFireStoreService() throws IOException {
     String projectId = "river-pointer-308317";
-    Firestore firestore = getFirestoreDB(getDefaultCredentials(), projectId);
+//    Firestore firestore = getFirestoreDB(getDefaultCredentials(), projectId);
+    Firestore firestore = getFirestoreDB();
     Assertions.assertNotNull(firestore);
   }
 
@@ -49,10 +59,22 @@ public class FirestoreRepositoryTest {
       .createScoped(Collections.singletonList("https://www.googleapis.com/auth/cloud-platform"));
   }
 
-  private GoogleCredentials getDefaultCredentials() throws IOException {
+  private GoogleCredentials getCredentialsWithJSON() throws IOException {
     String defaultJsonPath = "/home/shetu/JSON_FILE/shetu_gcp_key.json";
     return GoogleCredentials.fromStream(new FileInputStream(defaultJsonPath))
       .createScoped(Collections.singletonList("https://www.googleapis.com/auth/cloud-platform"));
+  }
+  private GoogleCredentials getDefaultCredentials() throws IOException {
+    return GoogleCredentials.getApplicationDefault();
+  }
+
+
+  private Firestore getFirestoreDB() throws IOException {
+    FirestoreOptions firestoreOptions = FirestoreOptions.getDefaultInstance().toBuilder()
+      .setCredentials(GoogleCredentials.getApplicationDefault())
+      .build();
+    Firestore db = firestoreOptions.getService();
+    return db;
   }
 
   private Firestore getFirestoreDB(GoogleCredentials credentials) {
@@ -73,11 +95,11 @@ public class FirestoreRepositoryTest {
   }
 
 
-  @AfterEach
-  void cleanup() {
-    this.db = null;
-    this.googleCredentials = null;
-  }
+//  @AfterEach
+//  void cleanup() {
+//    this.db = null;
+//    this.googleCredentials = null;
+//  }
 
   // --------------------------- Experimental Test cases ----------------------
   @Test
@@ -213,7 +235,7 @@ public class FirestoreRepositoryTest {
     }
   }
 
-  //------------------------------------ Tests on Custom Objects------------------------------
+  //------------------------------------ Tests on Custom Objects------------------------------//
   @Test
   void save() throws ExecutionException, InterruptedException {
     City city = new City("Los Angeles", "CA", "USA", false, 3900000L, Arrays.asList("west_coast", "socal"));

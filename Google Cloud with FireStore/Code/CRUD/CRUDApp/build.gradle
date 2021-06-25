@@ -29,6 +29,7 @@ dependencies {
     implementation("com.google.cloud:google-cloud-firestore:1.32.0")
     implementation('org.slf4j:slf4j-api:1.7.25')
     testImplementation('org.slf4j:slf4j-api:1.7.25')
+    implementation("com.google.cloud:google-cloud-storage:1.116.0")
 
 }
 
